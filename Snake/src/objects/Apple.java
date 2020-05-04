@@ -1,8 +1,10 @@
-package main;
+package objects;
 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+
+import main.Game;
 
 public class Apple extends GameObject {
 	/**

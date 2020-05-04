@@ -9,6 +9,10 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
+import objects.Apple;
+import objects.ObjectID;
+import objects.Snake;
+
 public class Game extends JFrame implements Runnable {
 	/**
 	 * 

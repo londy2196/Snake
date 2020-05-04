@@ -6,6 +6,9 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Random;
 
+import objects.Apple;
+import objects.Snake;
+
 public class GameLogic {
 	
 	private int score = 0;
@@ -50,6 +53,7 @@ public class GameLogic {
 			}
 		}
 		
+		// TODO
 		if((snake.x > 455 || snake.x < 40) || (snake.y > 455 || snake.y < 135)) {
 			snake.setBounds(0, 0, snake.width, snake.height);
 		}

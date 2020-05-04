@@ -1,4 +1,4 @@
-package main;
+package objects;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -13,7 +13,7 @@ public class Snake extends GameObject {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	LinkedList<Point> snakeBody = new LinkedList<Point>();
+	public LinkedList<Point> snakeBody = new LinkedList<Point>();
 
 	public Snake(int xPos, int yPos, ObjectID id) {
 		super(xPos, yPos, 10, 10, id);
