@@ -9,18 +9,18 @@ public class KeyInput extends KeyAdapter {
 	
 	private Snake snake;
 
-//	private boolean up;
-//	private boolean down;
-//	private boolean left;
-//	private boolean right;
+	private boolean up;
+	private boolean down;
+	private boolean left;
+	private boolean right;
 	
 	public KeyInput(Snake snake) {
 		this.snake = snake;
 		
-//		up = false;
-//		down = false;
-//		left = false;
-//		right = false;
+		up = false;
+		down = false;
+		left = false;
+		right = false;
 	}
 
 	@Override
