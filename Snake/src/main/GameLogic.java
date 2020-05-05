@@ -16,12 +16,14 @@ public class GameLogic {
 	
 	private Snake snake;
 	private Apple apple;
+	private Game game;
 	
 	private Random r;
 	
-	public GameLogic(Snake snake, Apple apple) {
+	public GameLogic(Snake snake, Apple apple, Game game) {
 		this.snake = snake;
 		this.apple = apple;
+		this.game = game;
 		r = new Random();
 	}
 	
@@ -36,10 +38,10 @@ public class GameLogic {
 	}
 	
 	public void update() {
-		collisions(snake, apple);
+		checkCollisions(snake, apple);
 	}
 	
-	private void collisions(Snake snake, Apple apple) {
+	private void checkCollisions(Snake snake, Apple apple) {
 		if(snake.intersects(apple)) {
 			int randX = r.nextInt((440 - 35) + 1) + 35;
 			int randY = r.nextInt((440 - 135) + 1) + 135;
@@ -53,10 +55,24 @@ public class GameLogic {
 			}
 		}
 		
-		// TODO
+		/* Border collision detect.
+		 * TODO
+		 */
+		Graphics g = game.getGraphics();
+		g.setFont(new Font("Arial", Font.BOLD, 30));
+		g.setColor(Color.RED);
+		
 		if((snake.x > 455 || snake.x < 40) || (snake.y > 455 || snake.y < 135)) {
 			snake.setBounds(0, 0, snake.width, snake.height);
+			g.drawString("Game Over!", 50, 300);
+
+			try {
+				game.thread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
+		
 	}
 	
 }

@@ -19,7 +19,7 @@ public class Game extends JFrame implements Runnable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Thread thread;
+	protected Thread thread;
 	
 	private boolean isRunning = false;
 	
@@ -45,7 +45,7 @@ public class Game extends JFrame implements Runnable {
 		
 		addKeyListener(new KeyInput(snake));
 		
-		logicMan = new GameLogic(snake, apple);
+		logicMan = new GameLogic(snake, apple, this);
 		
 		setTitle(title);
 		

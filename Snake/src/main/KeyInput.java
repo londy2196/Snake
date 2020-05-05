@@ -33,22 +33,22 @@ public class KeyInput extends KeyAdapter {
 		int key = e.getKeyCode();
 		
 		if(key == KeyEvent.VK_W) {
-			snake.setVelY(-1d);
+			snake.setVelY(-2d);
 			snake.setVelX(0d);
 		}
 		
 		if(key == KeyEvent.VK_D) {
-			snake.setVelX(1d);
+			snake.setVelX(2d);
 			snake.setVelY(0d);
 		}
 		
 		if(key == KeyEvent.VK_A) {
-			snake.setVelX(-1d);
+			snake.setVelX(-2d);
 			snake.setVelY(0d);
 		}
 		
 		if(key == KeyEvent.VK_S) {
-			snake.setVelY(1d);
+			snake.setVelY(2d);
 			snake.setVelX(0d);
 		}
 		
