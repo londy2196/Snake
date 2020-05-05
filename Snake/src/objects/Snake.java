@@ -38,7 +38,7 @@ public class Snake extends GameObject {
 		g2d.setStroke(new BasicStroke(10.0f));
 		
 		for(Point p : snakeBody) {
-			g2d.drawLine(p.x, p.y+5, p.x, p.y+5);
+			g2d.drawLine(p.x+5, p.y+5, p.x+5, p.y+5);
 		}
 		
 		snakeBody.removeLast();
