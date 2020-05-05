@@ -62,7 +62,7 @@ public class GameLogic {
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 		g.setColor(Color.RED);
 		
-		if((snake.x > 455 || snake.x < 40) || (snake.y > 455 || snake.y < 135)) {
+		if((snake.x > 455 || snake.x < 35) || (snake.y > 455 || snake.y < 135)) {
 			snake.setBounds(0, 0, snake.width, snake.height);
 			g.drawString("Game Over!", 50, 300);
 

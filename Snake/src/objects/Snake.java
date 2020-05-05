@@ -18,7 +18,7 @@ public class Snake extends GameObject {
 	public Snake(int xPos, int yPos, ObjectID id) {
 		super(xPos, yPos, 10, 10, id);
 		
-		for(int i = 0; i < 500; i++) {
+		for(int i = 0; i < 300; i++) {
 			snakeBody.add(new Point(xPos, yPos));
 		}
 	}
