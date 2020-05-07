@@ -7,7 +7,7 @@ import objects.GameObject;
 
 public class Handler {
 	
-	LinkedList<GameObject> gameObjects = new LinkedList<GameObject>();
+	public LinkedList<GameObject> gameObjects = new LinkedList<GameObject>();
 	
 	public void update() {
 		for(GameObject object : gameObjects) {

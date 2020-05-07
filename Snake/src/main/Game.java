@@ -14,9 +14,7 @@ import objects.ObjectID;
 import objects.Snake;
 
 public class Game extends JFrame implements Runnable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	private Thread thread;
@@ -68,12 +66,11 @@ public class Game extends JFrame implements Runnable {
 		requestFocus();
 		
 		setVisible(true);
+		start();
 	}
 
 	@Override
-	public void run() 
-	{
-		
+	public void run() {
 		long lastTime = System.nanoTime();
 		double ticks = 60.0; // Default 60 fps, might change later
 		double ns = 1000000000 / ticks;
@@ -101,11 +98,10 @@ public class Game extends JFrame implements Runnable {
 				updates = 0;
 			}
 		}
-		
 		stop();
 	}
 	
-	public synchronized void start() {
+	private synchronized void start() {
 		if (isRunning) {
 			return;
 		}
@@ -123,16 +119,14 @@ public class Game extends JFrame implements Runnable {
 		}
 		
 		Graphics g = bs.getDrawGraphics();
-		Color scoreBar = new Color(0, 153, 0);
-		Color outerColor = new Color(51, 153, 255);
 		
 		g.setColor(Color.green);
 		g.fillRect(0, 100, getWidth(), getHeight());
-		g.setColor(scoreBar);
+		g.setColor(new Color(0, 153, 0));
 		g.fillRect(0, 0, getWidth(), 100);
 		
-		g.setColor(outerColor);
 		// vertical lines
+		g.setColor(new Color(51, 153, 255));
 		for(int i = 0; i < getWidth(); i++) {
 			if (i <= 35 || i >= getWidth() - 35) {
 				g.drawLine(i, 100, i, getHeight());
@@ -146,18 +140,17 @@ public class Game extends JFrame implements Runnable {
 			}
 		}
 		
+		// apple and trophy images 
 		g.drawImage(appleScore, 35, 45, this);
 		g.drawImage(trophy, 130, 45, this);
 		
 		if(gameState == GameState.Playing) {
 			handler.render(g);
-			logicMan.render(g);
 		}
 		else if (gameState == GameState.GameOver) {
-		//	handler.render(g);
 			rs.render(g);
-			logicMan.render(g);
 		}
+		logicMan.render(g);
 		
 		g.dispose();
 		bs.show();
@@ -180,16 +173,6 @@ public class Game extends JFrame implements Runnable {
 		}
 		
 		isRunning = false;
-	}
-	
-	protected static boolean clamp(int x, int y, int width, int height) {
-		return x == width;
-		
-	}
-	
-	//GETTERS
-	public Thread getThread() {
-		return thread;
 	}
 
 }

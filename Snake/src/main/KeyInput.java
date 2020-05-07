@@ -24,16 +24,11 @@ public class KeyInput extends KeyAdapter {
 		down = false;
 		left = false;
 		right = false;
+		
 		snake.setVelX(0);
 		snake.setVelY(0);
 	}
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// ignore
-	}
-
-	@Override
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		
@@ -75,11 +70,6 @@ public class KeyInput extends KeyAdapter {
 		
 		if(key == KeyEvent.VK_ESCAPE) System.exit(-1); // remove when finished
 		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// ignore
 	}
 
 }

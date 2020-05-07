@@ -18,13 +18,12 @@ public class GameLogic {
 	private Apple apple;
 	private Game game;
 	
-	private Random r;
+	private Random r = new Random();
 	
 	public GameLogic(Snake snake, Apple apple, Game game) {
 		this.snake = snake;
 		this.apple = apple;
 		this.game = game;
-		r = new Random();
 	}
 	
 	public void render(Graphics g) {
@@ -63,7 +62,7 @@ public class GameLogic {
 			}
 		}
 	}
-	// TODO
+	
 	private void checkWallCollisions(Snake snake, Apple apple) {
 		if((snake.x > 455 || snake.x < 35) || (snake.y > 455 || snake.y < 135)) {
 			snake.setVelX(0);

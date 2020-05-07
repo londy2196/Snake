@@ -41,5 +41,9 @@ public abstract class GameObject extends Rectangle {
 	public ObjectID getID() {
 		return id;
 	}
+	
+	public void setID(ObjectID id) {
+		this.id = id;
+	}
 
 }

@@ -7,9 +7,7 @@ import java.awt.Toolkit;
 import main.Game;
 
 public class Apple extends GameObject {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	private static final Image appleImg = Toolkit.getDefaultToolkit().createImage("res/appleingame.png");
@@ -32,7 +30,7 @@ public class Apple extends GameObject {
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(appleImg, this.x, this.y, game);
+		g.drawImage(appleImg, x, y, game);
 	}
 
 	@Override

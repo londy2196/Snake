@@ -8,9 +8,7 @@ import java.awt.Point;
 import java.util.LinkedList;
 
 public class Snake extends GameObject {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	
 	public LinkedList<Point> snakeBody = new LinkedList<Point>();
@@ -41,7 +39,6 @@ public class Snake extends GameObject {
 			g2d.drawLine(p.x+5, p.y+5, p.x+5, p.y+5);
 		}
 		
-		//avoid error
 		if(!snakeBody.isEmpty()) {
 			snakeBody.removeLast();
 		}
