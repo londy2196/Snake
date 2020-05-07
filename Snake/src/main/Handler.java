@@ -3,7 +3,7 @@ package main;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
-import objects.GameObject;
+import gameobjects.GameObject;
 
 public class Handler {
 	

@@ -6,8 +6,9 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Random;
 
-import objects.Apple;
-import objects.Snake;
+import gameobjects.Apple;
+import gameobjects.Snake;
+import gamestates.GameState;
 
 public class GameLogic {
 	

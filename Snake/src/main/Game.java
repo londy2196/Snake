@@ -9,9 +9,11 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
-import objects.Apple;
-import objects.ObjectID;
-import objects.Snake;
+import gameobjects.Apple;
+import gameobjects.ObjectID;
+import gameobjects.Snake;
+import gamestates.GameState;
+import gamestates.Menu;
 
 public class Game extends JFrame implements Runnable {
 
@@ -21,22 +23,25 @@ public class Game extends JFrame implements Runnable {
 	
 	private boolean isRunning = false;
 	
-	private Image appleScore;
-	private Image trophy;
+	private Image appleScore = Toolkit.getDefaultToolkit().createImage("res/apple.png");
+	private Image trophy = Toolkit.getDefaultToolkit().createImage("res/trophy.png");
+	
+	//TaskBar Icon
+	private Image tbIcon = Toolkit.getDefaultToolkit().createImage("res/tbIcon.png");
 	
 	private Handler handler;
 	
 	private Snake snake;
 	private Apple apple;
 	private GameLogic logicMan;
-	private RetryState rs;
+	private MyMouseAdapter mouseMan;
 	private KeyInput ki;
+	private Menu menu;
 	
-	public GameState gameState = GameState.Playing;
+	public GameState gameState = GameState.Menu;
 	
 	public Game(int width, int height, String title) {
-		appleScore = Toolkit.getDefaultToolkit().createImage("res/apple.png");
-		trophy = Toolkit.getDefaultToolkit().createImage("res/trophy.png");
+		this.setIconImage(tbIcon);
 		
 		handler = new Handler();
 		apple = new Apple(350, 250, this, ObjectID.Apple);
@@ -50,8 +55,10 @@ public class Game extends JFrame implements Runnable {
 		
 		logicMan = new GameLogic(snake, apple, this);
 		
-		rs = new RetryState(snake, apple, this, ki, logicMan);
-		addMouseListener(rs);
+		mouseMan = new MyMouseAdapter(snake, apple, this, ki, logicMan);
+		addMouseListener(mouseMan);
+		
+		menu = new Menu(this);
 		
 		setTitle(title);
 		
@@ -146,11 +153,15 @@ public class Game extends JFrame implements Runnable {
 		
 		if(gameState == GameState.Playing) {
 			handler.render(g);
+			logicMan.render(g);
 		}
 		else if (gameState == GameState.GameOver) {
-			rs.render(g);
+			mouseMan.render(g);
+			logicMan.render(g);
 		}
-		logicMan.render(g);
+		else if(gameState == GameState.Menu) {
+			menu.render(g);
+		}
 		
 		g.dispose();
 		bs.show();

@@ -3,7 +3,7 @@ package main;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import objects.Snake;
+import gameobjects.Snake;
 
 public class KeyInput extends KeyAdapter {
 	

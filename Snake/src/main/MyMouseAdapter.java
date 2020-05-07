@@ -6,10 +6,11 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import objects.Apple;
-import objects.Snake;
+import gameobjects.Apple;
+import gameobjects.Snake;
+import gamestates.GameState;
 
-public class RetryState extends MouseAdapter {
+public class MyMouseAdapter extends MouseAdapter {
 	
 	private Game game;
 	private Snake snake;
@@ -17,7 +18,7 @@ public class RetryState extends MouseAdapter {
 	private KeyInput ki;
 	private GameLogic logicMan;
 	
-	public RetryState(Snake snake, Apple apple, Game game, KeyInput ki, GameLogic logicMan) {
+	public MyMouseAdapter(Snake snake, Apple apple, Game game, KeyInput ki, GameLogic logicMan) {
 		this.snake = snake;
 		this.apple = apple;
 		this.game = game;
@@ -49,19 +50,45 @@ public class RetryState extends MouseAdapter {
 		int mx = e.getX();
 		int my = e.getY();
 		
-		if(mouseOver(mx, my, 220, 40, 115, 50)) {
-			game.gameState = GameState.Playing;
+		if(game.gameState == GameState.GameOver) {
+			if(mouseOver(mx, my, 220, 40, 115, 50)) {
+				game.gameState = GameState.Playing;
+				
+				snake.reset();
+				apple.reset();
+				ki.reset();
+				
+				logicMan.setScore(0);
+			}
 			
-			snake.reset();
-			apple.reset();
-			ki.reset();
-			
-			logicMan.setScore(0);
+			if(mouseOver(mx, my, 350, 40, 115, 50)) {
+				game.gameState = GameState.Menu;
+				
+				snake.reset();
+				apple.reset();
+				ki.reset();
+				
+				logicMan.setScore(0);
+			}
 		}
 		
-		if(mouseOver(mx, my, 350, 40, 115, 50)) {
-			System.exit(-1);
+		if(game.gameState == GameState.Menu) {
+			// Play 
+			if(mouseOver(mx, my, 92, 175, 300, 50)) {
+				game.gameState = GameState.Playing;
+			}
+			
+			// Options 
+			if(mouseOver(mx, my, 92, 255, 300, 50)) {
+				// TODO
+			}
+			
+			// Quit
+			if(mouseOver(mx, my, 92, 335, 300, 50)) {
+				System.exit(-1);
+			}
 		}
+
 	}
 	
 	private boolean mouseOver(int mx, int my, int x, int y, int width, int height) {

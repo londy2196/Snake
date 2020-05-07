@@ -1,8 +1,9 @@
-package main;
+package gamestates;
 
 public enum GameState {
 	
 	Playing,
-	GameOver
+	GameOver,
+	Menu
 
 }
