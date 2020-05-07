@@ -35,44 +35,51 @@ public class GameLogic {
 		String hScoreStr = String.valueOf(highScore);
 		g.drawString(scoreStr, 80, 75);
 		g.drawString(hScoreStr, 175, 75);
+		
+		checkWallCollisions(snake, apple);
 	}
 	
 	public void update() {
-		checkCollisions(snake, apple);
+		checkAppleCollisions(snake, apple);
 	}
 	
-	private void checkCollisions(Snake snake, Apple apple) {
+	private void checkAppleCollisions(Snake snake, Apple apple) {
 		if(snake.intersects(apple)) {
 			int randX = r.nextInt((440 - 35) + 1) + 35;
-			int randY = r.nextInt((440 - 135) + 1) + 135;
+			int randY = r.nextInt((420 - 135) + 1) + 135;
 			apple.setBounds(randX, randY, apple.width, apple.height);
 			
-			score++;
-			highScore++;
+			if(score != highScore) {
+				score++;
+			}
+			else {
+				score++;
+				highScore++;
+			}
 			
+			// make snake longer
 			for(int i = 0; i < 200; i++) {
 				snake.snakeBody.add(new Point(snake.x, snake.y));
 			}
 		}
-		
-		/* Border collision detect.
-		 * TODO
-		 */
-		Graphics g = game.getGraphics();
-		g.setFont(new Font("Arial", Font.BOLD, 30));
-		g.setColor(Color.RED);
-		
+	}
+	// TODO
+	private void checkWallCollisions(Snake snake, Apple apple) {
 		if((snake.x > 455 || snake.x < 35) || (snake.y > 455 || snake.y < 135)) {
-			snake.setBounds(0, 0, snake.width, snake.height);
-			g.drawString("Game Over!", 50, 300);
-
-			try {
-				game.thread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			snake.setVelX(0);
+			snake.setVelY(0);
+			snake.snakeBody.clear();
+			game.gameState = GameState.GameOver;
 		}
-		
+	}
+	
+	// GETTERS & SETTERS
+	public int getScore() {
+		return score;
+	}
+	
+	public void setScore(int score) {
+		this.score = score;
 	}
 	
 }

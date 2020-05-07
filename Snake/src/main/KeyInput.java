@@ -16,11 +16,16 @@ public class KeyInput extends KeyAdapter {
 	
 	public KeyInput(Snake snake) {
 		this.snake = snake;
-		
+		reset();
+	}
+	
+	public void reset() {
 		up = false;
 		down = false;
 		left = false;
 		right = false;
+		snake.setVelX(0);
+		snake.setVelY(0);
 	}
 
 	@Override

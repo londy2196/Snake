@@ -19,7 +19,7 @@ public class Game extends JFrame implements Runnable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected Thread thread;
+	private Thread thread;
 	
 	private boolean isRunning = false;
 	
@@ -31,6 +31,10 @@ public class Game extends JFrame implements Runnable {
 	private Snake snake;
 	private Apple apple;
 	private GameLogic logicMan;
+	private RetryState rs;
+	private KeyInput ki;
+	
+	public GameState gameState = GameState.Playing;
 	
 	public Game(int width, int height, String title) {
 		appleScore = Toolkit.getDefaultToolkit().createImage("res/apple.png");
@@ -40,12 +44,16 @@ public class Game extends JFrame implements Runnable {
 		apple = new Apple(350, 250, this, ObjectID.Apple);
 		handler.addObject(apple);
 		
-		snake = new Snake(100, 250, ObjectID.Snake);
+		snake = new Snake(100, 270, ObjectID.Snake);
 		handler.addObject(snake);
 		
+		ki = new KeyInput(snake);
 		addKeyListener(new KeyInput(snake));
 		
 		logicMan = new GameLogic(snake, apple, this);
+		
+		rs = new RetryState(snake, apple, this, ki, logicMan);
+		addMouseListener(rs);
 		
 		setTitle(title);
 		
@@ -57,7 +65,6 @@ public class Game extends JFrame implements Runnable {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		getContentPane().setLayout(null);
 		requestFocus();
 		
 		setVisible(true);
@@ -142,8 +149,15 @@ public class Game extends JFrame implements Runnable {
 		g.drawImage(appleScore, 35, 45, this);
 		g.drawImage(trophy, 130, 45, this);
 		
-		handler.render(g);
-		logicMan.render(g);
+		if(gameState == GameState.Playing) {
+			handler.render(g);
+			logicMan.render(g);
+		}
+		else if (gameState == GameState.GameOver) {
+		//	handler.render(g);
+			rs.render(g);
+			logicMan.render(g);
+		}
 		
 		g.dispose();
 		bs.show();
@@ -166,6 +180,16 @@ public class Game extends JFrame implements Runnable {
 		}
 		
 		isRunning = false;
+	}
+	
+	protected static boolean clamp(int x, int y, int width, int height) {
+		return x == width;
+		
+	}
+	
+	//GETTERS
+	public Thread getThread() {
+		return thread;
 	}
 
 }

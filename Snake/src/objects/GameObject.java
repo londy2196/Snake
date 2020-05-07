@@ -10,7 +10,7 @@ public abstract class GameObject extends Rectangle {
 	private static final long serialVersionUID = 1L;
 	
 	protected double velX, velY;
-	protected ObjectID id;
+	private ObjectID id;
 	
 	public GameObject(int xPos, int yPos, int width, int height, ObjectID id) {
 		super(xPos, yPos, width, height);
@@ -19,24 +19,9 @@ public abstract class GameObject extends Rectangle {
 	
 	public abstract void update();
 	public abstract void render(Graphics g);
+	public abstract void reset();
 	
-	// GETTERS & SETTERS
-	public double getX() {
-		return x;
-	}
-	
-	public void setX(double x) {
-		this.x = (int) x;
-	}
-	
-	public double getY() {
-		return this.y;
-	}
-	
-	public void setY(double y) {
-		this.y = (int) y;
-	}
-	
+	// GETTERS & SETTERS	
 	public double getVelX() {
 		return velX;
 	}

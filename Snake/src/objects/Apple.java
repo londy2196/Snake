@@ -34,6 +34,11 @@ public class Apple extends GameObject {
 	public void render(Graphics g) {
 		g.drawImage(appleImg, this.x, this.y, game);
 	}
+
+	@Override
+	public void reset() {
+		this.setBounds(350, 250, width, height);
+	}
 	
 	
 	

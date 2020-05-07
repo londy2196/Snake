@@ -41,9 +41,20 @@ public class Snake extends GameObject {
 			g2d.drawLine(p.x+5, p.y+5, p.x+5, p.y+5);
 		}
 		
-		snakeBody.removeLast();
+		//avoid error
+		if(!snakeBody.isEmpty()) {
+			snakeBody.removeLast();
+		}
+		
 		snakeBody.push(new Point(x, y));
+	}
 
+	@Override
+	public void reset() {
+		this.setBounds(100, 270, width, height);
+		for(int i = 0; i < 300; i++) {
+			snakeBody.add(new Point(x, y));
+		}
 	}
 
 }
