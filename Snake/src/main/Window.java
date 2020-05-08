@@ -19,6 +19,7 @@ public class Window extends JFrame implements Runnable {
 	private Thread thread;
 	
 	private boolean isRunning = false;
+	private boolean fpsOption = false;
 	
 	//TaskBar Icon
 	private Image tbIcon = Toolkit.getDefaultToolkit().createImage("res/tbIcon.png");
@@ -34,6 +35,11 @@ public class Window extends JFrame implements Runnable {
 	
 	public GameState gameState = GameState.Menu;
 	
+	private double fps = 0;
+	
+	// for trophy menu appearance
+	private int gameSession = 0;
+	
 	public Window(int width, int height, String title) {
 		this.setIconImage(tbIcon);
 		
@@ -44,15 +50,15 @@ public class Window extends JFrame implements Runnable {
 		snake = new Snake(100, 270, ObjectID.Snake);
 		handler.addObject(snake);
 		
+		logicMan = new GameLogic(snake, apple, this);
+		
+		game = new Game(logicMan, handler, this);
+		
 		ki = new KeyInput(snake);
 		addKeyListener(new KeyInput(snake));
 		
-		logicMan = new GameLogic(snake, apple, this);
-		
-		mouseMan = new MyMouseAdapter(snake, apple, ki, logicMan, this);
+		mouseMan = new MyMouseAdapter(snake, apple, logicMan, ki, this);
 		addMouseListener(mouseMan);
-		
-		game = new Game(logicMan, handler, this);
 		
 		setTitle(title);
 		
@@ -96,6 +102,7 @@ public class Window extends JFrame implements Runnable {
 				timer += 1000;
 				System.out.println("FPS: " + frames + " / TICKS: " + updates);
 				frames = 0;
+				this.fps = updates; // for fps counter
 				updates = 0;
 			}
 		}
@@ -123,6 +130,11 @@ public class Window extends JFrame implements Runnable {
 		
 		game.render(g);
 		
+		// FPS Counter
+		if(fpsOption) {
+			game.drawFPSCounter(g);
+		}
+		
 		g.dispose();
 		bs.show();
 	}
@@ -144,6 +156,27 @@ public class Window extends JFrame implements Runnable {
 		}
 		
 		isRunning = false;
+	}
+	
+	// GETTERS & SETTERS
+	public double getFPS() {
+		return this.fps;
+	}
+	
+	public boolean getFPSOption() {
+		return fpsOption;
+	}
+	
+	public void setFPSOption(boolean fpsOption) {
+		this.fpsOption = fpsOption;
+	}
+	
+	public int getGameSession() {
+		return gameSession;
+	}
+	
+	public void setGameSession(int gameSession) {
+		this.gameSession = gameSession;
 	}
 
 }

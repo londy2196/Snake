@@ -12,6 +12,7 @@ public class Game {
 	
 	private Image appleScore = Toolkit.getDefaultToolkit().createImage("res/apple.png");
 	private Image trophy = Toolkit.getDefaultToolkit().createImage("res/trophy.png");
+	private Image trophyMenu = Toolkit.getDefaultToolkit().createImage("res/trophymenu.png");
 	
 	private GameLogic logicMan;
 	private Handler handler;
@@ -24,6 +25,8 @@ public class Game {
 	}
 	
 	public void render(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
+		
 		if(window.gameState == GameState.Playing) {
 			g.setColor(Color.green);
 			g.fillRect(0, 100, window.getWidth(), window.getHeight());
@@ -54,6 +57,8 @@ public class Game {
 		}
 		
 		if(window.gameState == GameState.GameOver) {
+			g2d.setStroke(new BasicStroke(1.0f));
+			
 			g.setFont(new Font("Arial", Font.BOLD, 30));
 			g.setColor(Color.red);
 			g.drawString("Game Over!", 160, 127);
@@ -69,9 +74,7 @@ public class Game {
 			logicMan.render(g);
 		}
 		
-		if(window.gameState == GameState.Menu) {
-			Graphics2D g2d = (Graphics2D) g;	
-			
+		if(window.gameState == GameState.Menu) {	
 			g2d.setColor(new Color(51, 153, 255));
 			g2d.setStroke(new BasicStroke(5.0f));
 			g2d.fillRect(0, 0, window.getWidth(), window.getHeight());
@@ -81,19 +84,68 @@ public class Game {
 			g2d.drawString("Snake!", 175, 100);
 			
 			g2d.setFont(new Font("Arial", Font.BOLD, 35));
-			g2d.drawRect(92, 175, 300, 50);
-			g2d.drawString("Play", 200, 210);
+			g2d.drawRect(92, 205, 300, 50);
+			g2d.drawString("Play", 200, 240);
 			
-			g2d.drawRect(92, 255, 300, 50);
-			g2d.drawString("Options", 176, 290);
+			g2d.drawRect(92, 285, 300, 50);
+			g2d.drawString("Options", 176, 320);
 			
-			g2d.drawRect(92, 335, 300, 50);
-			g2d.drawString("Quit", 200, 370);
+			g2d.drawRect(92, 365, 300, 50);
+			g2d.drawString("Quit", 200, 400);
+			
+			if(window.getGameSession() != 0) {
+				drawCurHighScore(g);
+			}
+		}
+		
+		if(window.gameState == GameState.Options) {
+			g2d.setColor(new Color(51, 153, 255));
+			g2d.fillRect(0, 0, window.getWidth(), window.getHeight());
+			
+			g2d.setFont(new Font("Arial", Font.BOLD, 40));
+			g2d.setColor(Color.BLACK);
+			g2d.drawString("Options", 170, 100);
+
+			g2d.setStroke(new BasicStroke(5.0f));
+			g2d.setFont(new Font("Arial", Font.BOLD, 35));
+			
+			// FPS
+			g2d.setFont(new Font("Arial", Font.BOLD, 25));
+			g2d.drawString("Turn on FPS Counter: ", 10, 190);
+			g2d.drawString("Off", 295, 150);
+			g2d.drawString("On", 395, 150);
+			g2d.drawRect(300, 170, 25, 25);
+			g2d.drawRect(400, 170, 25, 25);
+			
+			if(window.getFPSOption()) {
+				g2d.fillRect(400, 170, 25, 25);
+			}
+			else {
+				g2d.fillRect(300, 170, 25, 25);
+			}
+		
+			// Back
+			g2d.setFont(new Font("Arial", Font.BOLD, 35));
+			g2d.drawRect(143, 400, 200, 50);
+			g2d.drawString("Back", 200, 438);	
 		}
 	}
 	
-	public void update() {
+	public void drawFPSCounter(Graphics g) {
+		String fps = String.valueOf(window.getFPS());
 		
+		g.setFont(new Font("Arial", Font.BOLD, 18));
+		g.setColor(Color.white);
+		g.drawString("FPS: " + fps, 405, 45);
 	}
-
+	
+	private void drawCurHighScore(Graphics g) {
+		String scoreStr = String.valueOf(logicMan.getHighScore());
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("Arial", Font.BOLD, 40));
+		g.drawString(scoreStr, 260, 165);
+		
+		g.drawImage(trophyMenu, 150, 120, window);
+	}
+	
 }

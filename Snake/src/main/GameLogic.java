@@ -81,4 +81,12 @@ public class GameLogic {
 		this.score = score;
 	}
 	
+	public int getHighScore() {
+		return highScore;
+	}
+	
+	public void setHighScore(int highScore) {
+		this.highScore = highScore;
+	}
+	
 }

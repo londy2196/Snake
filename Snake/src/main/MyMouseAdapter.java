@@ -14,12 +14,12 @@ public class MyMouseAdapter extends MouseAdapter {
 	private KeyInput ki;
 	private GameLogic logicMan;
 	
-	public MyMouseAdapter(Snake snake, Apple apple, KeyInput ki, GameLogic logicMan, Window window) {
+	public MyMouseAdapter(Snake snake, Apple apple, GameLogic logicMan, KeyInput ki, Window window) {
 		this.snake = snake;
 		this.apple = apple;
-		this.window = window;
-		this.ki = ki;
 		this.logicMan = logicMan;
+		this.ki = ki;
+		this.window = window;
 	}
 
 	@Override
@@ -36,6 +36,7 @@ public class MyMouseAdapter extends MouseAdapter {
 				ki.reset();
 				
 				logicMan.setScore(0);
+				window.setGameSession(window.getGameSession() + 1);
 			}
 			
 			if(mouseOver(mx, my, 350, 40, 115, 50)) {
@@ -46,23 +47,39 @@ public class MyMouseAdapter extends MouseAdapter {
 				ki.reset();
 				
 				logicMan.setScore(0);
+				window.setGameSession(window.getGameSession() + 1);
 			}
 		}
 		
 		if(window.gameState == GameState.Menu) {
 			// Play 
-			if(mouseOver(mx, my, 92, 175, 300, 50)) {
+			if(mouseOver(mx, my, 92, 205, 300, 50)) {
 				window.gameState = GameState.Playing;
 			}
 			
 			// Options 
-			if(mouseOver(mx, my, 92, 255, 300, 50)) {
-				// TODO
+			if(mouseOver(mx, my, 92, 285, 300, 50)) {
+				window.gameState = GameState.Options;
 			}
 			
 			// Quit
-			if(mouseOver(mx, my, 92, 335, 300, 50)) {
+			if(mouseOver(mx, my, 92, 365, 300, 50)) {
 				System.exit(-1);
+			}
+		}
+		
+		if(window.gameState == GameState.Options) {
+			// Back
+			if(mouseOver(mx, my, 143, 400, 200, 50)) {
+				window.gameState = GameState.Menu;
+			}
+			
+			// FPS
+			if(mouseOver(mx, my, 300, 170, 25, 25)) {
+				window.setFPSOption(false);
+			}
+			else if (mouseOver(mx, my, 400, 170, 25, 25)) {
+				window.setFPSOption(true);
 			}
 		}
 
