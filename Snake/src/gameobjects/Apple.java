@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 
-import main.Game;
+import main.Window;
 
 public class Apple extends GameObject {
 
@@ -12,14 +12,14 @@ public class Apple extends GameObject {
 
 	private static final Image appleImg = Toolkit.getDefaultToolkit().createImage("res/appleingame.png");
 	
-	private Game game;
+	private Window window;
 	
 	private static final int WIDTH = 32;
 	private static final int HEIGHT = 32;
 	
-	public Apple(int xPos, int yPos, Game game, ObjectID id) {
+	public Apple(int xPos, int yPos, ObjectID id, Window window) {
 		super(xPos, yPos, WIDTH, HEIGHT, id);
-		this.game = game;
+		this.window = window;
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class Apple extends GameObject {
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(appleImg, x, y, game);
+		g.drawImage(appleImg, x, y, window);
 	}
 
 	@Override

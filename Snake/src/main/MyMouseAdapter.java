@@ -1,48 +1,25 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import gameobjects.Apple;
 import gameobjects.Snake;
-import gamestates.GameState;
 
 public class MyMouseAdapter extends MouseAdapter {
 	
-	private Game game;
 	private Snake snake;
 	private Apple apple;
+	private Window window;
 	private KeyInput ki;
 	private GameLogic logicMan;
 	
-	public MyMouseAdapter(Snake snake, Apple apple, Game game, KeyInput ki, GameLogic logicMan) {
+	public MyMouseAdapter(Snake snake, Apple apple, KeyInput ki, GameLogic logicMan, Window window) {
 		this.snake = snake;
 		this.apple = apple;
-		this.game = game;
+		this.window = window;
 		this.ki = ki;
 		this.logicMan = logicMan;
-	}
-	
-	public void render(Graphics g) {
-		g.setFont(new Font("Arial", Font.BOLD, 30));
-		g.setColor(Color.red);
-		g.drawString("Game Over!", 160, 127);
-		
-		g.setColor(Color.BLUE);
-		g.drawString("Retry", 238, 75);
-		g.drawString("Quit", 377, 75);
-		
-		g.setColor(Color.black);
-		g.drawRect(220, 40, 115, 50);
-		g.drawRect(350, 40, 115, 50);
-	}
-	
-	// might use later
-	public void update() {
-		
 	}
 
 	@Override
@@ -50,9 +27,9 @@ public class MyMouseAdapter extends MouseAdapter {
 		int mx = e.getX();
 		int my = e.getY();
 		
-		if(game.gameState == GameState.GameOver) {
+		if(window.gameState == GameState.GameOver) {
 			if(mouseOver(mx, my, 220, 40, 115, 50)) {
-				game.gameState = GameState.Playing;
+				window.gameState = GameState.Playing;
 				
 				snake.reset();
 				apple.reset();
@@ -62,7 +39,7 @@ public class MyMouseAdapter extends MouseAdapter {
 			}
 			
 			if(mouseOver(mx, my, 350, 40, 115, 50)) {
-				game.gameState = GameState.Menu;
+				window.gameState = GameState.Menu;
 				
 				snake.reset();
 				apple.reset();
@@ -72,10 +49,10 @@ public class MyMouseAdapter extends MouseAdapter {
 			}
 		}
 		
-		if(game.gameState == GameState.Menu) {
+		if(window.gameState == GameState.Menu) {
 			// Play 
 			if(mouseOver(mx, my, 92, 175, 300, 50)) {
-				game.gameState = GameState.Playing;
+				window.gameState = GameState.Playing;
 			}
 			
 			// Options 

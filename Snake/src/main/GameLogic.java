@@ -8,7 +8,6 @@ import java.util.Random;
 
 import gameobjects.Apple;
 import gameobjects.Snake;
-import gamestates.GameState;
 
 public class GameLogic {
 	
@@ -17,14 +16,14 @@ public class GameLogic {
 	
 	private Snake snake;
 	private Apple apple;
-	private Game game;
+	private Window window;
 	
 	private Random r = new Random();
 	
-	public GameLogic(Snake snake, Apple apple, Game game) {
+	public GameLogic(Snake snake, Apple apple, Window window) {
 		this.snake = snake;
 		this.apple = apple;
-		this.game = game;
+		this.window = window;
 	}
 	
 	public void render(Graphics g) {
@@ -69,7 +68,7 @@ public class GameLogic {
 			snake.setVelX(0);
 			snake.setVelY(0);
 			snake.snakeBody.clear();
-			game.gameState = GameState.GameOver;
+			window.gameState = GameState.GameOver;
 		}
 	}
 	
