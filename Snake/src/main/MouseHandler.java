@@ -9,8 +9,8 @@ public class MouseHandler extends MouseAdapter {
 	
 	private Game game;
 	
-	public MouseHandler(Game snake) {
-		this.game = snake;
+	public MouseHandler(Game game) {
+		this.game = game;
 	}
 
 	@Override

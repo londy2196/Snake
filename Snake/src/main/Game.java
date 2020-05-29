@@ -20,21 +20,29 @@ public class Game extends JFrame implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Image appleScore = Toolkit.getDefaultToolkit().createImage("res/apple.png");
-	private Image appleImg = Toolkit.getDefaultToolkit().createImage("res/appleingame.png");
-	private Image trophy = Toolkit.getDefaultToolkit().createImage("res/trophy.png");
-	private Image trophyMenu = Toolkit.getDefaultToolkit().createImage("res/trophymenu.png");
-	private Image tbIcon = Toolkit.getDefaultToolkit().createImage("res/tbIcon.png");
+	// All images used in this game.
+	private Image appleScore = Toolkit.getDefaultToolkit().createImage("res/images/apple.png");
+	private Image appleImg = Toolkit.getDefaultToolkit().createImage("res/images/appleingame.png");
+	private Image trophy = Toolkit.getDefaultToolkit().createImage("res/images/trophy.png");
+	private Image trophyMenu = Toolkit.getDefaultToolkit().createImage("res/images/trophymenu.png");
+	private Image snakeImg = Toolkit.getDefaultToolkit().createImage("res/images/snake.png");
+	private Image tbIcon = Toolkit.getDefaultToolkit().createImage("res/images/tbIcon.png");
 	
 	private Random r;
 	
 	private boolean gameOver;
 	private boolean fpsSelected = false;
 
+	// Thread used to run the game
 	private Thread thread;
 	
+	// x and y coordinates of the apple
 	private int appleX, appleY;
 	
+	/*
+	 * All x and y coordinates of the tail,
+	 * and the length of the snake.
+	 */
 	private int[] tailX;
 	private int[] tailY;
 	private int tailLength;
@@ -48,20 +56,28 @@ public class Game extends JFrame implements Runnable {
 	
 	private long gameSession = 0;
 	
+	// Direction of the snake.
 	private enum Direction {
 		STOP, LEFT, RIGHT, UP, DOWN;
 	}
 	
 	private Direction dir;
 	
+	/*
+	 * Game state; This program draws different stuff onto the window
+	 * depending on the state of the game.
+	 */
 	public enum State {
 		MENU, PLAYING, OPTIONS, GAME_OVER;
 	}
 	
 	public static State gameState = State.MENU;
 	
+	// Input handlers
 	private MouseHandler mouseMan;
+	private KeyInput ki;
 	
+	// JFrame constructor
 	public Game(int width, int height, String title) {
 		setTitle(title);
 				
@@ -75,24 +91,26 @@ public class Game extends JFrame implements Runnable {
 		setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		getContentPane().setBackground(Color.BLACK);
-		addKeyListener(new KeyInput());
 		
 		setVisible(true);
 		
 		init();
+		
+		mouseMan = new MouseHandler(this);
+		ki = new KeyInput();
 		addMouseListener(mouseMan);
+		addKeyListener(ki);
 		
 		start();
 	}
 	
+	// Initializes the game.
 	private void init() {
 		dir = Direction.STOP;
 		r = new Random();
-		mouseMan = new MouseHandler(this);
 		
-		tailX = new int[2000];
-		tailY = new int[2000];
+		tailX = new int[3000];
+		tailY = new int[3000];
 		tailLength = 15;
 		
 		for(int i = 0; i < tailLength; i++) {
@@ -106,6 +124,7 @@ public class Game extends JFrame implements Runnable {
 		appleY = 250;
 	}
 	
+	// Game loop
 	@Override
 	public void run() 
 	{
@@ -141,6 +160,7 @@ public class Game extends JFrame implements Runnable {
 		stop();
 	}
 	
+	// Draws the game screen.
 	private void render() {
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null) {
@@ -259,12 +279,15 @@ public class Game extends JFrame implements Runnable {
 					}
 				}
 				
+				// Draws apple
 				g.drawImage(appleImg, appleX, appleY, this);
 				
+				// Draws snake
 				g.setColor(Color.BLUE);
 				for(int i = 0; i < tailLength; i++) 
 				{
-					g.fillRect(tailX[i], tailY[i], 20, 20);
+				//	g.fillOval(tailX[i], tailY[i], 20, 20);
+					g.drawImage(snakeImg, tailX[i], tailY[i], this);
 				}
 				
 				// apple and trophy images 
@@ -299,6 +322,7 @@ public class Game extends JFrame implements Runnable {
 		bs.show();
 	}
 	
+	// Updates the game screen
 	private void update() 
 	{
 		if(gameState == State.PLAYING) 
@@ -371,6 +395,7 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 	
+	// Start the thread
 	private synchronized void start() 
 	{
 		if(gameOver) return;
@@ -380,6 +405,7 @@ public class Game extends JFrame implements Runnable {
 		gameOver = false;
 	}
 	
+	// Stop the thread
 	private synchronized void stop() 
 	{
 		if(!gameOver) return;
@@ -397,13 +423,15 @@ public class Game extends JFrame implements Runnable {
 	
 	/*
 	 * Sets apple and snake in original position.
-	 *  Also resets the score to zero.
+	 *  Also resets the score to zero, and resets keys.
 	 */
 	public void resetGame() 
 	{
 		init();
+		ki.resetKeys();
 	}
 	
+	// Draws high score in main menu after a session.
 	private void drawCurHighScore(Graphics g) {
 		String scoreStr = String.valueOf(highScore);
 
@@ -428,45 +456,51 @@ public class Game extends JFrame implements Runnable {
 		public void keyPressed(KeyEvent e) {
 			int key = e.getKeyCode();
 			
-			if(key == KeyEvent.VK_W && !down) 
+			if(gameState == State.PLAYING) 
 			{
-				dir = Direction.UP;	
-				up = true;
-				left = false;
-				right = false;
+				if(key == KeyEvent.VK_W && !down) 
+				{
+					dir = Direction.UP;	
+					up = true;
+					left = false;
+					right = false;
+				}
+				
+				if(key == KeyEvent.VK_S && !up) 
+				{
+					dir = Direction.DOWN;
+					down = true;
+					left = false;
+					right = false;
+				}
+				
+				if(key == KeyEvent.VK_A && !right) 
+				{
+					dir = Direction.LEFT;
+					left = true;
+					up = false;
+					down = false;
+				}
+				
+				if(key == KeyEvent.VK_D && !left) 
+				{
+					dir = Direction.RIGHT;
+					right = true;
+					up = false;
+					down = false;
+				}
 			}
-			
-			if(key == KeyEvent.VK_S && !up) 
-			{
-				dir = Direction.DOWN;
-				down = true;
-				left = false;
-				right = false;
-			}
-			
-			if(key == KeyEvent.VK_A && !right) 
-			{
-				dir = Direction.LEFT;
-				left = true;
-				up = false;
-				down = false;
-			}
-			
-			if(key == KeyEvent.VK_D && !left) 
-			{
-				dir = Direction.RIGHT;
-				right = true;
-				up = false;
-				down = false;
-			}
-			
-			if(key == KeyEvent.VK_ESCAPE) System.exit(-1); // remove when finished
 		}	
+		
+		public void resetKeys() {
+			up = false;
+			down = false;
+			left = false;
+			right = false;
+		}
 	}
 	
-	// GETTERS & SETTERS
 	public void setFPSOption(boolean fpsSelected) {
 		this.fpsSelected = fpsSelected;
 	}
-
 }
