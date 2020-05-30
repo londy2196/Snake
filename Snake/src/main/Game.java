@@ -15,7 +15,7 @@ import java.awt.image.BufferStrategy;
 import java.util.Random;
 
 import javax.swing.JFrame;
-
+// delete later
 public class Game extends JFrame implements Runnable {
 
 	private static final long serialVersionUID = 1L;
