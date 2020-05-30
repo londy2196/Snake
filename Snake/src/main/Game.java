@@ -27,8 +27,8 @@ public class Game extends JFrame implements Runnable {
 	private Image trophyMenu = Toolkit.getDefaultToolkit().createImage("Snake/res/images/trophymenu.png");
 	private Image tbIcon = Toolkit.getDefaultToolkit().createImage("Snake/res/images/tbIcon.png");
 	
-	
-	private Random r;
+	// Used to randomize the apple's location in the game.
+	private Random r = new Random();
 	
 	// Flags
 	private boolean gameOver;
@@ -107,8 +107,6 @@ public class Game extends JFrame implements Runnable {
 	
 	// Initializes the game.
 	private void init() {
-		r = new Random();
-		
 		dir = Direction.STOP;
 		gameState = State.MENU;
 		
