@@ -4,10 +4,10 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -25,11 +25,12 @@ public class Game extends JFrame implements Runnable {
 	private Image appleImg = Toolkit.getDefaultToolkit().createImage("res/images/appleingame.png");
 	private Image trophy = Toolkit.getDefaultToolkit().createImage("res/images/trophy.png");
 	private Image trophyMenu = Toolkit.getDefaultToolkit().createImage("res/images/trophymenu.png");
-	private Image snakeImg = Toolkit.getDefaultToolkit().createImage("res/images/snake.png");
 	private Image tbIcon = Toolkit.getDefaultToolkit().createImage("res/images/tbIcon.png");
+	
 	
 	private Random r;
 	
+	// Flags
 	private boolean gameOver;
 	private boolean fpsSelected = false;
 
@@ -48,13 +49,10 @@ public class Game extends JFrame implements Runnable {
 	private int tailLength;
 	
 	private int score;
-
 	private int highScore = 0;
 	
 	// For fps counter
 	private int fps;
-	
-	private long gameSession = 0;
 	
 	// Direction of the snake.
 	private enum Direction {
@@ -71,11 +69,14 @@ public class Game extends JFrame implements Runnable {
 		MENU, PLAYING, OPTIONS, GAME_OVER;
 	}
 	
-	public static State gameState = State.MENU;
+	public static State gameState;
 	
 	// Input handlers
 	private MouseHandler mouseMan;
 	private KeyInput ki;
+	
+	// Color of the snake
+	private Color snakeColor = Color.BLUE;
 	
 	// JFrame constructor
 	public Game(int width, int height, String title) {
@@ -106,8 +107,10 @@ public class Game extends JFrame implements Runnable {
 	
 	// Initializes the game.
 	private void init() {
-		dir = Direction.STOP;
 		r = new Random();
+		
+		dir = Direction.STOP;
+		gameState = State.MENU;
 		
 		tailX = new int[3000];
 		tailY = new int[3000];
@@ -168,37 +171,31 @@ public class Game extends JFrame implements Runnable {
 			return;
 		}
 		
-		Graphics g = bs.getDrawGraphics();
-		Graphics2D g2d = (Graphics2D) g;
+		Graphics2D g2d = (Graphics2D) bs.getDrawGraphics();
 		
 		switch (gameState) 
 		{
 			case GAME_OVER:
-				g2d.setStroke(new BasicStroke(3.0f));
-			
-				g.setFont(new Font("Arial", Font.BOLD, 30));
-				g.setColor(Color.red);
-				g.drawString("Game Over!", 160, 127);
-			
-				g.setColor(Color.BLUE);
-				g.drawString("Retry", 238, 75);
-				g.drawString("Quit", 377, 75);
-			
-				g.setColor(Color.black);
-				g.drawRect(220, 40, 115, 50);
-				g.drawRect(350, 40, 115, 50);
-			
-				g.setColor(Color.white);
-				g.setFont(new Font("Arial", Font.BOLD, 23));
-			
-				String scoreStr = String.valueOf(score);
-				String hScoreStr = String.valueOf(highScore);
-				g.drawString(scoreStr, 80, 75);
-				g.drawString(hScoreStr, 175, 75);
-			
-				break;
+				g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 				
+				g2d.setStroke(new BasicStroke(3.0f));
+				g2d.setColor(new Color(233, 17, 17));
+				g2d.setFont(new Font("Arial", Font.BOLD, 30));
+				g2d.drawString("Game Over!", 160, 127);
+			
+				g2d.setColor(Color.BLACK);
+				g2d.drawString("Retry", 238, 75);
+				g2d.drawString("Quit", 377, 75);
+			
+				g2d.drawRect(220, 40, 115, 50);
+				g2d.drawRect(350, 40, 115, 50);
+
+			//	g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				
+				break;
 			case MENU:
+				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				
 				g2d.setColor(new Color(51, 153, 255));
 				g2d.setStroke(new BasicStroke(5.0f));
 				g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
@@ -217,12 +214,14 @@ public class Game extends JFrame implements Runnable {
 				g2d.drawRect(92, 365, 300, 50);
 				g2d.drawString("Quit", 200, 403);
 				
-				if(gameSession != 0) {
-					drawCurHighScore(g);
+				if(mouseMan.getGameSession() != 0) {
+					drawCurHighScore(g2d);
 				}
 				
 				break;
 			case OPTIONS:
+				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				
 				g2d.setColor(new Color(51, 153, 255));
 				g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 				
@@ -247,26 +246,50 @@ public class Game extends JFrame implements Runnable {
 				else {
 					g2d.fillRect(300, 170, 25, 25);
 				}
-			
+				
+				// Snake color
+				g2d.drawString("Change snake color: ", 10, 280);
+				
+				g2d.drawString("Blue", 50, 320);
+				g2d.drawString("Red", 160, 320);
+				g2d.drawString("Black", 260, 320);
+				g2d.drawString("White", 380, 320);
+				
+				g2d.drawRect(68, 340, 15, 15);
+				g2d.drawRect(176, 340, 15, 15);
+				g2d.drawRect(285, 340, 15, 15);
+				g2d.drawRect(405, 340, 15, 15);
+				
+				if(snakeColor.equals(Color.BLUE))
+					g2d.fillRect(68, 340, 15, 15);
+				if(snakeColor.equals(Color.RED))
+					g2d.fillRect(176, 340, 15, 15);
+				if(snakeColor.equals(Color.BLACK))
+					g2d.fillRect(285, 340, 15, 15);
+				if(snakeColor.equals(Color.WHITE))
+					g2d.fillRect(405, 340, 15, 15);
+				
 				// Back
 				g2d.setFont(new Font("Arial", Font.BOLD, 35));
 				g2d.drawRect(143, 400, 200, 50);
 				g2d.drawString("Back", 200, 438);
-				break;
 				
+				break;
 			case PLAYING:
-				g.setColor(Color.green);
-				g.fillRect(0, 100, this.getWidth(), this.getHeight());
-				g.setColor(new Color(0, 153, 0));
-				g.fillRect(0, 0, this.getWidth(), 100);
+				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				
+				g2d.setColor(Color.green);
+				g2d.fillRect(0, 100, this.getWidth(), this.getHeight());
+				g2d.setColor(new Color(0, 153, 0));
+				g2d.fillRect(0, 0, this.getWidth(), 100);
 				
 				// vertical lines
-				g.setColor(new Color(51, 153, 255));
+				g2d.setColor(new Color(51, 153, 255));
 				for(int i = 0; i < this.getWidth(); i++) 
 				{
 					if (i <= 35 || i >= this.getWidth() - 35) 
 					{
-						g.drawLine(i, 100, i, this.getHeight());
+						g2d.drawLine(i, 100, i, this.getHeight());
 					}
 				}
 				
@@ -275,34 +298,28 @@ public class Game extends JFrame implements Runnable {
 				{
 					if(i <= 135 || i >= this.getHeight() - 35) 
 					{
-						g.drawLine(0, i, this.getWidth(), i);
+						g2d.drawLine(0, i, this.getWidth(), i);
 					}
 				}
 				
 				// Draws apple
-				g.drawImage(appleImg, appleX, appleY, this);
+				g2d.drawImage(appleImg, appleX, appleY, this);
 				
 				// Draws snake
-				g.setColor(Color.BLUE);
+				g2d.setColor(snakeColor);
 				for(int i = 0; i < tailLength; i++) 
 				{
-				//	g.fillOval(tailX[i], tailY[i], 20, 20);
-					g.drawImage(snakeImg, tailX[i], tailY[i], this);
+					g2d.fillOval(tailX[i], tailY[i], 20, 20);
 				}
 				
 				// apple and trophy images 
-				g.drawImage(appleScore, 35, 45, this);
-				g.drawImage(trophy, 130, 45, this);
+				g2d.drawImage(appleScore, 35, 45, this);
+				g2d.drawImage(trophy, 130, 45, this);
 				
-				g.setColor(Color.white);
-				g.setFont(new Font("Arial", Font.BOLD, 23));
-				
-				scoreStr = String.valueOf(score);
-				hScoreStr = String.valueOf(highScore);
-				g.drawString(scoreStr, 80, 75);
-				g.drawString(hScoreStr, 175, 75);
-				
-				gameSession++;
+				g2d.setColor(Color.white);
+				g2d.setFont(new Font("Arial", Font.BOLD, 23));
+				g2d.drawString(String.valueOf(score), 80, 75);
+				g2d.drawString(String.valueOf(highScore), 175, 75);
 				
 				break;	
 			default:
@@ -310,14 +327,14 @@ public class Game extends JFrame implements Runnable {
 		}
 		
 		if(fpsSelected) {
-			g.setFont(new Font("Arial", Font.BOLD, 18));
-			g.setColor(Color.white);
-			g.drawString("FPS: " + fps, 398, 45);
+			g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+			g2d.setFont(new Font("Arial", Font.BOLD, 18));
+			g2d.setColor(Color.white);
+			g2d.drawString("FPS: " + fps, 398, 490);
 		}
 		
 		Toolkit.getDefaultToolkit().sync();
 		
-		g.dispose();
 		g2d.dispose();
 		bs.show();
 	}
@@ -352,6 +369,7 @@ public class Game extends JFrame implements Runnable {
 				int randX = r.nextInt((440 - 35) + 1) + 35;
 				int randY = r.nextInt((420 - 135) + 1) + 135;
 				
+				// extra for loop to make sure the apple doesn't spawn in the snake
 				for(int i = 0; i < tailLength; i++) 
 				{
 					if(new Rectangle(randX, randY, 32, 32).intersects(new Rectangle(tailX[i], tailY[i], 20, 20))) 
@@ -432,14 +450,14 @@ public class Game extends JFrame implements Runnable {
 	}
 	
 	// Draws high score in main menu after a session.
-	private void drawCurHighScore(Graphics g) {
+	private void drawCurHighScore(Graphics2D g2d) {
 		String scoreStr = String.valueOf(highScore);
 
-		g.setColor(Color.WHITE);
-		g.setFont(new Font("Arial", Font.BOLD, 40));
-		g.drawString(scoreStr, 260, 165);
+		g2d.setColor(Color.WHITE);
+		g2d.setFont(new Font("Arial", Font.BOLD, 40));
+		g2d.drawString(scoreStr, 260, 165);
 
-		g.drawImage(trophyMenu, 150, 120, this);
+		g2d.drawImage(trophyMenu, 150, 120, this);
 	}
 	
 	/*
@@ -503,4 +521,13 @@ public class Game extends JFrame implements Runnable {
 	public void setFPSOption(boolean fpsSelected) {
 		this.fpsSelected = fpsSelected;
 	}
+
+	public Color getSnakeColor() {
+		return snakeColor;
+	}
+
+	public void setSnakeColor(Color snakeColor) {
+		this.snakeColor = snakeColor;
+	}
+
 }
