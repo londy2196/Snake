@@ -190,8 +190,6 @@ public class Game extends JFrame implements Runnable {
 				g2d.drawRect(220, 40, 115, 50);
 				g2d.drawRect(350, 40, 115, 50);
 
-			//	g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				
 				break;
 			case MENU:
 				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
