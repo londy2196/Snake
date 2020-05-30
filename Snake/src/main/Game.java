@@ -21,11 +21,11 @@ public class Game extends JFrame implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
 	// All images used in this game.
-	private Image appleScore = Toolkit.getDefaultToolkit().createImage("res/images/apple.png");
-	private Image appleImg = Toolkit.getDefaultToolkit().createImage("res/images/appleingame.png");
-	private Image trophy = Toolkit.getDefaultToolkit().createImage("res/images/trophy.png");
-	private Image trophyMenu = Toolkit.getDefaultToolkit().createImage("res/images/trophymenu.png");
-	private Image tbIcon = Toolkit.getDefaultToolkit().createImage("res/images/tbIcon.png");
+	private Image appleScore = Toolkit.getDefaultToolkit().createImage("Snake/res/images/apple.png");
+	private Image appleImg = Toolkit.getDefaultToolkit().createImage("Snake/res/images/appleingame.png");
+	private Image trophy = Toolkit.getDefaultToolkit().createImage("Snake/res/images/trophy.png");
+	private Image trophyMenu = Toolkit.getDefaultToolkit().createImage("Snake/res/images/trophymenu.png");
+	private Image tbIcon = Toolkit.getDefaultToolkit().createImage("Snake/res/images/tbIcon.png");
 	
 	
 	private Random r;
