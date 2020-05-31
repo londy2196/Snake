@@ -33,7 +33,8 @@ public class Game extends JFrame implements Runnable {
 	// Flags
 	private boolean gameOver;
 	private boolean fpsSelected = false;
-
+	private boolean isPaused = false;
+	
 	// Thread used to run the game
 	private Thread thread;
 	
@@ -66,7 +67,7 @@ public class Game extends JFrame implements Runnable {
 	 * depending on the state of the game.
 	 */
 	public enum State {
-		MENU, PLAYING, OPTIONS, GAME_OVER;
+		MENU, PLAYING, PAUSE, OPTIONS, GAME_OVER;
 	}
 	
 	public static State gameState;
@@ -152,6 +153,7 @@ public class Game extends JFrame implements Runnable {
 			if(System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
 				System.out.println("FPS: " + frames + " / TICKS: " + updates);
+				System.out.println("GameState: " + gameState);
 				fps = frames;
 				
 				frames = 0;
@@ -211,22 +213,26 @@ public class Game extends JFrame implements Runnable {
 				g2d.drawString("Quit", 200, 403);
 				
 				if(mouseMan.getGameSession() != 0) {
-					drawCurHighScore(g2d);
+					g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+					g2d.setColor(Color.WHITE);
+					g2d.setFont(new Font("Arial", Font.BOLD, 40));
+					g2d.drawString(String.valueOf(highScore), 260, 165);
+
+					g2d.drawImage(trophyMenu, 150, 120, this);
 				}
 				
 				break;
 			case OPTIONS:
 				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g2d.setStroke(new BasicStroke(5.0f));
 				
 				g2d.setColor(new Color(51, 153, 255));
 				g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 				
+				// Options title
 				g2d.setFont(new Font("Arial", Font.BOLD, 40));
 				g2d.setColor(Color.BLACK);
 				g2d.drawString("Options", 170, 100);
-
-				g2d.setStroke(new BasicStroke(5.0f));
-				g2d.setFont(new Font("Arial", Font.BOLD, 35));
 				
 				// FPS Counter
 				g2d.setFont(new Font("Arial", Font.BOLD, 25));
@@ -318,6 +324,33 @@ public class Game extends JFrame implements Runnable {
 				g2d.drawString(String.valueOf(highScore), 175, 75);
 				
 				break;	
+			case PAUSE:
+				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g2d.setStroke(new BasicStroke(5.0f));
+				g2d.setColor(new Color(51, 153, 255));
+				g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+				
+				// Paused title
+				g2d.setColor(Color.BLACK);
+				g2d.setFont(new Font("Arial", Font.BOLD, 40));
+				g2d.drawString("Paused", 170, 100);
+				
+				// Continue
+				g2d.setFont(new Font("Arial", Font.BOLD, 35));
+				g2d.drawRect(92, 205, 300, 50);
+				g2d.drawString("Continue", 167, 243);
+				
+				// Options
+				g2d.drawRect(92, 285, 300, 50);
+				g2d.drawString("Options", 176, 322);
+				
+				// Return to main menu
+				g2d.setFont(new Font("Arial", Font.BOLD, 26));
+				g2d.drawRect(92, 365, 300, 50);
+				g2d.drawString("Return to main menu", 112, 400);
+			
+				
+				break;
 			default:
 				break;
 		}
@@ -325,7 +358,7 @@ public class Game extends JFrame implements Runnable {
 		if(fpsSelected) {
 			g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 			g2d.setFont(new Font("Arial", Font.BOLD, 18));
-			g2d.setColor(Color.white);
+			g2d.setColor(new Color(96, 96, 96));
 			g2d.drawString("FPS: " + fps, 398, 490);
 		}
 		
@@ -406,6 +439,10 @@ public class Game extends JFrame implements Runnable {
 				tailX[i] = tailX[i - 1];
 				tailY[i] = tailY[i - 1];
 			}
+			
+			if(isPaused) {
+				gameState = State.PAUSE;
+			}
 		}
 	}
 	
@@ -445,20 +482,7 @@ public class Game extends JFrame implements Runnable {
 		ki.resetKeys();
 	}
 	
-	// Draws high score in main menu after a session.
-	private void drawCurHighScore(Graphics2D g2d) {
-		String scoreStr = String.valueOf(highScore);
-
-		g2d.setColor(Color.WHITE);
-		g2d.setFont(new Font("Arial", Font.BOLD, 40));
-		g2d.drawString(scoreStr, 260, 165);
-
-		g2d.drawImage(trophyMenu, 150, 120, this);
-	}
-	
-	/*
-	 * Nested class for key input handling
-	 */
+	// Nested class for key input handling
 	private class KeyInput extends KeyAdapter {
 		
 		private boolean up = false;
@@ -469,7 +493,7 @@ public class Game extends JFrame implements Runnable {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int key = e.getKeyCode();
-			
+
 			if(gameState == State.PLAYING) 
 			{
 				if(key == KeyEvent.VK_W && !down) 
@@ -503,6 +527,31 @@ public class Game extends JFrame implements Runnable {
 					up = false;
 					down = false;
 				}
+				
+				if(key == KeyEvent.VK_ESCAPE)
+				{	
+					isPaused = true;
+				}
+			}
+			
+			if(gameState == State.PAUSE)
+			{
+				if(key == KeyEvent.VK_ESCAPE) {
+					gameState = State.PLAYING;
+					isPaused = false;
+				}
+			}
+			
+			if(gameState == State.OPTIONS)
+			{
+				if(key == KeyEvent.VK_ESCAPE) {
+					if(isPaused) {
+						gameState = State.PAUSE;
+					}
+					else {
+						gameState = State.MENU;
+					}
+				}
 			}
 		}	
 		
@@ -524,6 +573,14 @@ public class Game extends JFrame implements Runnable {
 
 	public void setSnakeColor(Color snakeColor) {
 		this.snakeColor = snakeColor;
+	}
+
+	public boolean isPaused() {
+		return isPaused;
+	}
+
+	public void setPaused(boolean isPaused) {
+		this.isPaused = isPaused;
 	}
 
 }

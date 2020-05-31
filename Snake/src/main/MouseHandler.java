@@ -25,7 +25,55 @@ public class MouseHandler extends MouseAdapter {
 		int mx = e.getX();
 		int my = e.getY();
 		
-		switch (Game.gameState) {
+		switch(Game.gameState) {
+		case MENU:
+			// Play
+			if(mouseOver(mx, my, 92, 205, 300, 50)) {
+				gameSession++;
+				Game.gameState = State.PLAYING;
+			}
+									
+			// Options 
+			if(mouseOver(mx, my, 92, 285, 300, 50)) {
+				Game.gameState = State.OPTIONS;
+			}
+									
+			// Quit
+			if(mouseOver(mx, my, 92, 365, 300, 50)) {
+				System.exit(-1);
+			}
+			
+			break;
+		case OPTIONS:
+			// FPS Toggle
+			if(mouseOver(mx, my, 300, 170, 25, 25)) {
+				game.setFPSOption(false);
+			}
+			else if (mouseOver(mx, my, 400, 170, 25, 25)) {
+				game.setFPSOption(true);
+			}
+						
+			// Snake color
+			if(mouseOver(mx, my, 68, 340, 15, 15))
+				game.setSnakeColor(Color.BLUE);
+			if(mouseOver(mx, my, 176, 340, 15, 15))
+				game.setSnakeColor(Color.RED);
+			if(mouseOver(mx, my, 285, 340, 15, 15))
+				game.setSnakeColor(Color.BLACK);
+			if(mouseOver(mx, my, 405, 340, 15, 15))
+				game.setSnakeColor(Color.WHITE);
+						
+			// Back
+			if(mouseOver(mx, my, 143, 400, 200, 50)) {
+				if(game.isPaused()) {
+					Game.gameState = State.PAUSE;
+				}
+				else {
+					Game.gameState = State.MENU;
+				}
+			}
+			
+			break;
 		case GAME_OVER:
 			// Retry 
 			if(mouseOver(mx, my, 220, 40, 115, 50)) {
@@ -41,50 +89,25 @@ public class MouseHandler extends MouseAdapter {
 			}
 			
 			break;
-		case MENU:
-			// Play
+		case PAUSE:
+			// Continue
 			if(mouseOver(mx, my, 92, 205, 300, 50)) {
-				gameSession++;
 				Game.gameState = State.PLAYING;
+				game.setPaused(false);
 			}
 			
-			// Options 
+			// Options
 			if(mouseOver(mx, my, 92, 285, 300, 50)) {
 				Game.gameState = State.OPTIONS;
 			}
 			
-			// Quit
+			// Return to main menu
 			if(mouseOver(mx, my, 92, 365, 300, 50)) {
-				System.exit(-1);
-			}
-			
-			break;
-		case OPTIONS:
-			// Back
-			if(mouseOver(mx, my, 143, 400, 200, 50)) {
 				Game.gameState = State.MENU;
+				game.setPaused(false);
+				game.resetGame();
 			}
 			
-			// FPS Toggle
-			if(mouseOver(mx, my, 300, 170, 25, 25)) {
-				game.setFPSOption(false);
-			}
-			else if (mouseOver(mx, my, 400, 170, 25, 25)) {
-				game.setFPSOption(true);
-			}
-			
-			// Snake color
-			if(mouseOver(mx, my, 68, 340, 15, 15))
-				game.setSnakeColor(Color.BLUE);
-			if(mouseOver(mx, my, 176, 340, 15, 15))
-				game.setSnakeColor(Color.RED);
-			if(mouseOver(mx, my, 285, 340, 15, 15))
-				game.setSnakeColor(Color.BLACK);
-			if(mouseOver(mx, my, 405, 340, 15, 15))
-				game.setSnakeColor(Color.WHITE);
-			
-			break;
-		case PLAYING:
 			break;
 		default:
 			break;
