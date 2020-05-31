@@ -20,6 +20,7 @@ public class MouseHandler extends MouseAdapter {
 		gameSession = 0;
 	}
 
+	//
 	@Override
 	public void mousePressed(MouseEvent e) {
 		int mx = e.getX();
