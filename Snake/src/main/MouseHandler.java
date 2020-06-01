@@ -57,7 +57,7 @@ public class MouseHandler extends MouseAdapter {
 			if(mouseOver(mx, my, 68, 340, 15, 15))
 				game.setSnakeColor(Color.BLUE);
 			if(mouseOver(mx, my, 176, 340, 15, 15))
-				game.setSnakeColor(Color.RED);
+				game.setSnakeColor(new Color(204, 0, 0));
 			if(mouseOver(mx, my, 285, 340, 15, 15))
 				game.setSnakeColor(Color.BLACK);
 			if(mouseOver(mx, my, 405, 340, 15, 15))

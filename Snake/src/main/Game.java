@@ -149,13 +149,13 @@ public class Game extends JFrame implements Runnable {
 			}
 			render();
 			frames++;
-			
+
 			if(System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
 				System.out.println("FPS: " + frames + " / TICKS: " + updates);
 				System.out.println("GameState: " + gameState);
-				fps = frames;
 				
+				fps = frames;	
 				frames = 0;
 				updates = 0;
 			}
@@ -269,7 +269,7 @@ public class Game extends JFrame implements Runnable {
 				
 				if(snakeColor.equals(Color.BLUE))
 					g2d.fillRect(68, 340, 15, 15);
-				if(snakeColor.equals(Color.RED))
+				if(snakeColor.equals(new Color(204, 0, 0)))
 					g2d.fillRect(176, 340, 15, 15);
 				if(snakeColor.equals(Color.BLACK))
 					g2d.fillRect(285, 340, 15, 15);
@@ -316,7 +316,7 @@ public class Game extends JFrame implements Runnable {
 				g2d.setColor(snakeColor);
 				for(int i = 0; i < tailLength; i++) 
 				{
-					g2d.fillOval(tailX[i], tailY[i], 20, 20);
+					g2d.fillOval(tailX[i], tailY[i], 20, 20); // change later
 				}
 				
 				// apple and trophy images 
@@ -381,7 +381,8 @@ public class Game extends JFrame implements Runnable {
 	private void update() 
 	{
 		if(gameState == State.PLAYING) 
-		{
+		{	
+			// Direction of the snake
 			switch(dir) 
 			{
 				case UP:
@@ -400,6 +401,7 @@ public class Game extends JFrame implements Runnable {
 					break;
 			}
 			
+			// Check snake apple collisions
 			if(new Rectangle(tailX[0], tailY[0], 20, 20).intersects(new Rectangle(appleX, appleY, 32, 32))) 
 			{
 				tailLength += 30;
@@ -430,14 +432,45 @@ public class Game extends JFrame implements Runnable {
 				}
 			}
 			
+			// Check snake head and tail collision
 			for(int i = 1; i < tailLength; i++) 
 			{
-				if(tailX[i] == tailX[0] && tailY[i] == tailY[0] && i > 15) 
+				if(i <= 15) 
+					continue;
+				
+				if(dir == Direction.UP) 
 				{
-					gameState = State.GAME_OVER;
+					if(tailX[0] == tailX[i] && tailY[0] == tailY[i] + 18) 
+					{
+						gameState = State.GAME_OVER;
+					}
+				}
+				
+				if(dir == Direction.DOWN)
+				{
+					if(tailX[0] == tailX[i] && tailY[0] == tailY[i] - 18) 
+					{
+						gameState = State.GAME_OVER;
+					}
+				}
+				if(dir == Direction.LEFT) 
+				{
+					if(tailX[0] == tailX[i] + 18 && tailY[0] == tailY[i]) 
+					{
+						gameState = State.GAME_OVER;
+					}
+				}
+				
+				if(dir == Direction.RIGHT) 
+				{
+					if(tailX[0] == tailX[i] - 18 && tailY[0] == tailY[i])
+					{
+						gameState = State.GAME_OVER;
+					}
 				}
 			}
 			
+			// Check snake and border collisions
 			if((tailX[0] > 447  || tailX[0] < 35) || (tailY[0] > 447 || tailY[0] < 135)) 
 			{
 				gameState = State.GAME_OVER;
@@ -574,10 +607,6 @@ public class Game extends JFrame implements Runnable {
 	
 	public void setFPSOption(boolean fpsSelected) {
 		this.fpsSelected = fpsSelected;
-	}
-
-	public Color getSnakeColor() {
-		return snakeColor;
 	}
 
 	public void setSnakeColor(Color snakeColor) {
