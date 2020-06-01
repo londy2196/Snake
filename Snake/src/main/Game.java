@@ -221,6 +221,11 @@ public class Game extends JFrame implements Runnable {
 					g2d.drawImage(trophyMenu, 150, 120, this);
 				}
 				
+				g2d.setFont(new Font("Arial", Font.BOLD, 10));
+				g2d.setColor(new Color(224, 224, 224));
+				g2d.drawString("***Use WASD keys to control the snake.", 10, 465);
+				g2d.drawString("***Press ESC to pause the game.", 10, 482);
+				
 				break;
 			case OPTIONS:
 				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -349,6 +354,10 @@ public class Game extends JFrame implements Runnable {
 				g2d.drawRect(92, 365, 300, 50);
 				g2d.drawString("Return to main menu", 112, 400);
 			
+				g2d.setFont(new Font("Arial", Font.BOLD, 10));
+				g2d.setColor(new Color(224, 224, 224));
+				g2d.drawString("***Use WASD keys to control the snake.", 10, 465);
+				g2d.drawString("***Press ESC to pause the game.", 10, 482);
 				
 				break;
 			default:
