@@ -14,18 +14,24 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+
+/*
+ * @author Alfredo Londono
+ * @since 6/10/2020
+ */
 
 public class Game extends JFrame implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 	
-	// All images used in this game.
-	private Image appleScore = Toolkit.getDefaultToolkit().createImage("Snake/res/images/apple.png");
-	private Image appleImg = Toolkit.getDefaultToolkit().createImage("Snake/res/images/appleingame.png");
-	private Image trophy = Toolkit.getDefaultToolkit().createImage("Snake/res/images/trophy.png");
-	private Image trophyMenu = Toolkit.getDefaultToolkit().createImage("Snake/res/images/trophymenu.png");
-	private Image tbIcon = Toolkit.getDefaultToolkit().createImage("Snake/res/images/tbIcon.png");
+	// All images to be used in this application.
+	private Image appleScore;
+	private Image appleImg;
+	private Image trophy;
+	private Image trophyMenu;
+	private Image tbIcon;
 	
 	// Used to randomize the apple's location in the game.
 	private Random r = new Random();
@@ -81,6 +87,7 @@ public class Game extends JFrame implements Runnable {
 	
 	// JFrame constructor
 	public Game(int width, int height, String title) {
+		createImages();
 		setTitle(title);
 				
 		Dimension dim = new Dimension(width, height);
@@ -124,6 +131,24 @@ public class Game extends JFrame implements Runnable {
 		
 		appleX = 350;
 		appleY = 250;
+	}
+	
+	// Create images
+	private void createImages() {
+		ImageIcon appleScoreIcon = new ImageIcon(this.getClass().getClassLoader().getResource("resources/apple.png"));
+		appleScore = appleScoreIcon.getImage();
+		
+		ImageIcon appleImgIcon = new ImageIcon(this.getClass().getClassLoader().getResource("resources/appleingame.png"));
+		appleImg = appleImgIcon.getImage();
+		
+		ImageIcon trophyIcon = new ImageIcon(this.getClass().getClassLoader().getResource("resources/trophy.png"));
+		trophy = trophyIcon.getImage();
+		
+		ImageIcon trophyMenuIcon = new ImageIcon(this.getClass().getClassLoader().getResource("resources/trophymenu.png"));
+		trophyMenu = trophyMenuIcon.getImage();
+		
+		ImageIcon tbIcon = new ImageIcon(this.getClass().getClassLoader().getResource("resources/tbIcon.png"));
+		this.tbIcon = tbIcon.getImage();
 	}
 	
 	// Game loop

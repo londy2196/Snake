@@ -6,6 +6,11 @@ import java.awt.event.MouseEvent;
 
 import main.Game.State;
 
+/*
+ * @author Alfredo Londono
+ * @since 6/10/2020
+ */
+
 public class MouseHandler extends MouseAdapter {
 	
 	private Game game;
